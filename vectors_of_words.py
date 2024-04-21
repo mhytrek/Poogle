@@ -7,9 +7,11 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 from sklearn.preprocessing import normalize
+from sklearn.utils.extmath import randomized_svd
 # nltk.download('stopwords')
 
 def find_words(content):
+    content = content.lower()
     ps = PorterStemmer()
     words = re.split(r'[\s|,|\.|=|;|"|:|\(|\)|\{|\}|\[|\]|?|!]+', content)
     words = list(map(ps.stem, words))
@@ -17,8 +19,8 @@ def find_words(content):
 
 def all_files_vector():
     voc = set()
-    for file_name in os.listdir("test"):
-        file_path = os.path.join("test", file_name)
+    for file_name in os.listdir("wiki_articles"):
+        file_path = os.path.join("wiki_articles", file_name)
         with open(file_path, 'rb') as file_opened:
             obj = pickle.load(file_opened)
             content = obj.get('content')
@@ -30,12 +32,21 @@ def bag_of_words():
     stopwords_set = set(stopwords.words('english'))
     return list(all_words - stopwords_set)
 
+def do_svd(matrix, k=5):
+    u,d,v = randomized_svd(matrix, n_components=k, random_state=None)
+    d = np.diag(d)
+    return u,d,v
+
+
+
+
+
 def find_articles_vector(bag_of_word):
     N = len(bag_of_word)
     matrix = []
     document_freq = [0 for _ in range(len(bag_of_word))]
     documents = []
-    for file_name in os.listdir("test"):
+    for file_name in os.listdir("wiki_articles"):
         vec = [0 for _ in range(len(bag_of_word))]
         file_path = os.path.join("test", file_name)
         with open(file_path, 'rb') as file_opened:
@@ -57,12 +68,17 @@ def find_articles_vector(bag_of_word):
     normalized_matrix = normalize(matrix,axis=1, norm='l1')
     normalized_matrix = normalized_matrix.T
     document_freq = np.array(document_freq)
+    s,d,v = do_svd(normalized_matrix)
+    SVD = {'S':s,
+           'V': v,
+           'D': d,}
 
     file_handler = open("Data/Articles_test_data", "wb")
     A = {'matrix': normalized_matrix,
          'frequency': document_freq,
          'bagofwords': bag_of_word,
          'articles': documents,
+         'svd': SVD,
          }
     pickle.dump(A, file_handler)
     file_handler.close()
@@ -70,9 +86,9 @@ def find_articles_vector(bag_of_word):
 
 
 
-def main():
+def inicialize():
     bag = bag_of_words()
     matrix = find_articles_vector(bag)
     return len(bag)
 
-print(main())
+inicialize()
