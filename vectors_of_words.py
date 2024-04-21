@@ -32,13 +32,10 @@ def bag_of_words():
     stopwords_set = set(stopwords.words('english'))
     return list(all_words - stopwords_set)
 
-def do_svd(matrix, k=5):
+def do_svd(matrix, k=400):
     u,d,v = randomized_svd(matrix, n_components=k, random_state=None)
     d = np.diag(d)
     return u,d,v
-
-
-
 
 
 def find_articles_vector(bag_of_word):
@@ -48,7 +45,7 @@ def find_articles_vector(bag_of_word):
     documents = []
     for file_name in os.listdir("wiki_articles"):
         vec = [0 for _ in range(len(bag_of_word))]
-        file_path = os.path.join("test", file_name)
+        file_path = os.path.join("wiki_articles", file_name)
         with open(file_path, 'rb') as file_opened:
             obj = pickle.load(file_opened)
             content = obj.get('content')
@@ -67,19 +64,16 @@ def find_articles_vector(bag_of_word):
     matrix = np.array(matrix, dtype=object)
     normalized_matrix = normalize(matrix,axis=1, norm='l1')
     normalized_matrix = normalized_matrix.T
-    document_freq = np.array(document_freq)
     s,d,v = do_svd(normalized_matrix)
-    SVD = {'S':s,
+    SVD = {'S': s,
            'V': v,
-           'D': d,}
+           'D': d}
 
-    file_handler = open("Data/Articles_test_data", "wb")
+    file_handler = open("Data/Articles_data", "wb")
     A = {'matrix': normalized_matrix,
-         'frequency': document_freq,
          'bagofwords': bag_of_word,
          'articles': documents,
-         'svd': SVD,
-         }
+         'svd': SVD}
     pickle.dump(A, file_handler)
     file_handler.close()
     return
