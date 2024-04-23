@@ -20,8 +20,8 @@ def find_words(content):
 
 def all_files_vector():
     voc = set()
-    for file_name in os.listdir("../test"):
-        file_path = os.path.join("../test", file_name)
+    for file_name in os.listdir("../poland"):
+        file_path = os.path.join("../poland", file_name)
         with open(file_path, 'rb') as file_opened:
             obj = pickle.load(file_opened)
             content = obj.get('content')
@@ -44,9 +44,9 @@ def find_articles_vector(bag_of_word):
     matrix = []
     document_freq = [0 for _ in range(len(bag_of_word))]
     documents = []
-    for file_name in os.listdir("../test"):
+    for file_name in os.listdir("../poland"):
         vec = [0 for _ in range(len(bag_of_word))]
-        file_path = os.path.join("../test", file_name)
+        file_path = os.path.join("../poland", file_name)
         with open(file_path, 'rb') as file_opened:
             obj = pickle.load(file_opened)
             content = obj.get('content')
