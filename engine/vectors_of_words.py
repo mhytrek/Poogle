@@ -20,8 +20,8 @@ def find_words(content):
 
 def all_files_vector():
     voc = set()
-    for file_name in os.listdir("wiki_articles"):
-        file_path = os.path.join("wiki_articles", file_name)
+    for file_name in os.listdir("../test"):
+        file_path = os.path.join("../test", file_name)
         with open(file_path, 'rb') as file_opened:
             obj = pickle.load(file_opened)
             content = obj.get('content')
@@ -33,7 +33,7 @@ def bag_of_words():
     stopwords_set = set(stopwords.words('english'))
     return list(all_words - stopwords_set)
 
-def do_svd(matrix, k=300):
+def do_svd(matrix, k=100):
     u,d,v = randomized_svd(matrix, n_components=k, random_state=None)
     d = np.diag(d)
     return u,d,v
@@ -44,9 +44,9 @@ def find_articles_vector(bag_of_word):
     matrix = []
     document_freq = [0 for _ in range(len(bag_of_word))]
     documents = []
-    for file_name in os.listdir("wiki_articles"):
+    for file_name in os.listdir("../test"):
         vec = [0 for _ in range(len(bag_of_word))]
-        file_path = os.path.join("wiki_articles", file_name)
+        file_path = os.path.join("../test", file_name)
         with open(file_path, 'rb') as file_opened:
             obj = pickle.load(file_opened)
             content = obj.get('content')
@@ -58,7 +58,6 @@ def find_articles_vector(bag_of_word):
                     document_freq[bag_of_word.index(word)] += 1
                 vec[bag_of_word.index(word)] += 1
         matrix.append(np.array(vec, dtype=object))
-    print("before idf")
     for col in range(N):
         idf = math.log(len(matrix)/document_freq[col])
         for i in range(len(matrix)):
@@ -70,9 +69,8 @@ def find_articles_vector(bag_of_word):
     SVD = {'S': s,
            'V': v,
            'D': d}
-    print("dumping")
 
-    file_handler = open("Data/Articles_data_Poland", "wb")
+    file_handler = open("../Data/Articles_data_polandk=100", "wb")
     A = {'matrix': normalized_matrix,
          'bagofwords': bag_of_word,
          'articles': documents,
@@ -88,3 +86,4 @@ def inicialize():
     matrix = find_articles_vector(bag)
     return
 
+inicialize()
