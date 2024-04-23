@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <style>
+        body {
+            background-color: #E2827C;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+            background-color: #F1C2BE;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .return-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #1b1b1b;
+            color: #fff;
+            border: none;
+            border-radius: 15px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .return-button:hover {
+            background-color: #333333;
+        }
+        .result-link {
+            display: block;
+            margin-bottom: 10px;
+            color: #333333;
+
+            transition: color 0.5s ease;
+        }
+        .result-link:hover {
+            color: #902720;
+        }
+        .links{
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div style="text-align: center">
+    {% load static %}
+    <img src="{% static 'images/logo1.png' %}" alt="Logo" height="200">
+    </div>
+    <div class="container">
+    <h1 style="color: #1b1b1b; margin-top: 20px;">Search result: {{ query }}</h1>
+    {% if results %}
+        {% for result in results %}
+            <a href="{{ result.url }}" class="result-link" style="font-size: 20px">{{ result.title }}</a>
+        {% endfor %}
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+    <a href="{% url 'index' %}" class="return-button">Return to Homepage</a>
+</div>
+<div class="links">
+    <a href="https://github.com/mhytrek" target="_blank" style="margin-right: 15px">
+         {% load static %}
+        <img src="{% static 'images/github.png' %}" alt="Github" style="height: 30px">
+    </a>
+    <a href=https://www.linkedin.com/in/michalinahytrek/ target="_blank">
+         {% load static %}
+        <img src="{% static 'images/linkedin.png' %}" alt="Linkedin" style="height: 30px">
+    </a>
+</div>
+
+</body>
+</html>
