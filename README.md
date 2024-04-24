@@ -1,3 +1,6 @@
-# Search_engine
-Search engine made for AGH UST Computational Method Course
-~~ in progress
+# Poogle
+Search engine using articles from wikipedia about Poland.
+
+# Application
+
+
