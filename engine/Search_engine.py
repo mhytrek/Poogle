@@ -2,12 +2,13 @@ import pickle
 from question_transform import *
 class Search_engine:
     def __init__(self):
-        file_handler = open("Data/Articles_data_Poland", "rb")
+        file_handler = open("Data/Articles_data_polandk=100", "rb")
         data = pickle.load(file_handler)
         self.matrix = data.get('matrix')
         self.documents = data.get('articles')
         self.bag_of_words = data.get('bagofwords')
         self.svd_matrix = data.get('svd')
+        print(len(self.bag_of_words))
         file_handler.close()
 
     def search(self, q, n=10, svd=True):
@@ -26,4 +27,5 @@ def main():
         question = input("Ask me question about Poland:\n")
         engine.search(question)
 
-
+if __name__ == '__main__':
+    main()
